@@ -720,6 +720,264 @@ def get_data(aTuple):
   return (min_nums, max_nums, unique_words)
 ```
 
+#### Lists
+
+- **Ordered sequence** of information, accessible by index
+- A list is denoted by **square brackets**, [ ]
+- A list contains elements:
+  - Usually homogeneous
+  - Can contain mixed types
+- List elements can be changed, so a list is **mutable**
+
+- An element of a list is at a position (aka **index**) in list, indices start at 0
+- Index can be a variable expression, must evaluate to an *int*
+
+#### Changing Elements
+
+- Assigning to an element at an index changes the value
+
+```python
+L = [1, 2, 3]
+L[1] = 4
+
+# L is now [1, 4, 3]
+```
+
+#### List Operations - Add
+
+- **Add** element to end of a list with *L.append( element )*
+- **Mutates** the list:
+
+```python
+L = [1, 2, 3]
+L.append(5)
+# L is now [1, 2, 3, 5]
+```
+
+- To combine lists togheter use **concatenation**, operator **+**
+- **Mutate** list with *L.extend( some_list )*
+
+```python
+L1 = [1, 2, 3]
+L2 = [4, 5, 6]
+L3 = L1 + L2
+# L3 is now [1, 2, 3, 4, 5, 6]
+L1.extend([0, 6])
+# L1 is now [1, 2, 3, 0, 6]
+```
+
+#### List Operations - Remove
+
+- Delete elements at a specific index with *del ( L [ index ] )*
+- Remove element at **end of list** with L.pop( ), returns the removed element
+- Remove a **specific element** with *L.remove( element )*
+  - Looks the element and removes it
+  - If element occurs multiple times, removes the first occurrence
+  - If element not in list, gives an error
+
+#### Convert List to Strings
+
+- Convert **string to list** with _list( s )_, returns a list with every character from s an element in L
+- Can use _s.split( )_, to **split a string on a character** parameter, splits on spaces if called without a parameter
+- Use _' '.join( L )_ to turn a **list of characters into a string**, can give a character in quotes to add char between every element
+
+```python
+s = "I <3 CS"
+list(s)					# returns ['I', ' ', '<', '3', ' ', 'C', 'S']
+s.split('<')		# returns ['I', '3 CS']
+L = ['a', 'b', 'c']
+''.join(L)			# returns 'abc'
+'_'.join(L)			# returns 'a_b_c'
+```
+
+#### Other List Operations
+
+- _sort( )_ and _sorted( )_
+- _reverse( )_
+
+```python
+L = [9, 6, 0, 3]
+sorted(L)			# returns sorted list, does not mutate L
+L.sort()			# mutates L = [0, 3, 6, 9]
+L.reverse()		# mutates L = [9, 6, 3, 0]
+```
+
+## Mutation, Aliasing, Cloning
+
+#### Lists in Memory
+
+- Lists are **mutable**
+- Behave differently than immutable types
+- Is an object in memory
+- Variable names points to an object
+- Any variable pointing to that object is affected
+- Key phrase to keep in mind when working with lists is **side effects**
+
+#### An Analogy
+
+- Attributes of a person
+  - Singer, rich
+- He is known by many names
+- All nicknames point to the **same person**
+  - Add a new attribute to **one nickname**
+    - Justin Bieber: singer, rich, **troublemaker**
+  - **All of his nicknames** refer to old attributes and all new ones
+    - The Bieb is: Singer, rich, **troublemaker**
+    - JBeebs is:   Singer, rich, **troublemaker**
+
+#### Aliases
+
+- _hot_ is an **alias** for _warm_ - changing one changes the other!
+- _append( )_ has a side effect
+
+```python
+a = 1
+b = a 
+print(a)
+print(b)
+
+warm = ['red', 'yellow', 'orange']
+hot = warm
+```
+
+
+
+<img src="/Users/simone/Desktop/Edx/MIT6.00x/Schermata 2020-09-25 alle 15.07.03.png" alt="Schermata 2020-09-25 alle 15.07.03" style="zoom: 67%;" />
+
+```python
+hot.append('pink')
+print(warm)		# mutated by append() called on hot
+```
+
+#### Print Is Not ==
+
+- If two lists print the same thing, does not mean they are the same structure
+
+```python
+cool = ['blue', 'green', 'grey']
+chill = ['blue', 'green', 'grey']
+```
+
+<img src="/Users/simone/Desktop/Edx/MIT6.00x/Schermata 2020-09-25 alle 15.12.39.png" alt="Schermata 2020-09-25 alle 15.12.39" style="zoom:67%;" />
+
+#### Cloning a List
+
+- Create a new list and **copy everby element** using
+
+```python
+chill = cool[:]
+```
+
+- If now i mutate _chill_, _cool_ won't change because they are two different structures
+
+#### Sorting Lists
+
+- Calling _sort( )_ **mutates** the list, returns nothing
+- Calling _sorted( )_ **does not mutate** list, must assign result to a variable
+
+```python
+warm = ['red', 'yellow', 'orange']
+sortedwarm = warm.sort()
+print(warm)
+print(sortedwarm)
+# sortedwarm will be None, warm will be mutated
+
+cool = ['grey', 'green', 'blue']
+sortedcool = sorted(cool)
+print(cool)
+print(sortedcool)
+# sortedcool will be a new list containing sorted cool list, cool will be unchanged
+```
+
+#### Lists of Lists of Lists of...
+
+- Can have **nested** lists
+- Side effects still possible after mutation
+
+```python
+warm = ['yellow', 'orange']
+hot = ['red']
+brightcolors = [warm]
+brightcolors.append(hot)
+hot.append('pink')
+```
+
+<img src="/Users/simone/Desktop/Edx/MIT6.00x/Schermata 2020-09-25 alle 15.27.05.png" alt="Schermata 2020-09-25 alle 15.27.05" style="zoom:67%;" />
+
+#### Mutation and Iteration
+
+- **Avoid** mutating a list as you are iterating over it
+
+```python
+def remove_dups(L1, L2):
+  for e in L1:
+    if e in L2:
+      L1.remove(e)
+      
+L1 = [1, 2, 3, 4]
+L2 = [1, 2, 5, 6]
+remove_dups(L1, L2)
+```
+
+- L1 is [2, 3, 4] not [3, 4], why?
+  - Python uses an internal counter to keep track of index it is in the loop
+  - Mutating changes the list length but Python doesn't update the counter
+  - Loop never sees element 2
+
+- Solution:
+
+```python
+def remove_dups(L1, L2):
+  L1_copy = L1[:]
+  for e in L1_copy:
+    if e in L2:
+      L1.remove(e)
+```
+
+## Functions as Objects
+
+```python
+def applyToEach(L, f):
+  """assumes L is a list, f a function
+     mutates L by replacing each element,
+     e, of L by f(e)"""
+  for i in range(len(L)):
+    L[i] = f(L[i])
+    
+L = [1, -2, 3.4]
+applyToEach(L, abs)		# L = [1, 2, 3.4]
+applyToEach(L, int)   # L = [1, 2, 3]
+applyToEach(L, fact)	# L = [1, 2, 6]
+applyToEach(L, fib)		# L = [1, 2, 13]
+
+```
+
+- Useful when given a data structure, give me back a version of that data structure where i've done something to each element of the list
+
+#### Lists of Functions
+
+```python
+def applyFuns(L, x):
+  for f in L:
+    print(f(x))
+    
+applyFuns([abs, int, fact, fib], 4)
+# output: 4, 4, 24, 5
+```
+
+#### Generalization of HOPS
+
+- Python provides a general purpse HOP (high order program), _map_
+- Simple form - a unary function and a collection of suitable arguments
+  - _map( abs, [1, -2, 3, -4] )_
+- Produces a 'iterable', so need to walk down on it
+
+```python
+for elt in map(abs, [1, -2, 3, -4]):
+  print(elt)
+# output: [1, 2, 3, 4]
+```
+
 
 
 
